@@ -1,3 +1,17 @@
+## Updates from twintproject/twint
+
+### twint.token.RefreshTokenException: Could not find the Guest token in HTML
+
+This problem doesn't happen recently.
+
+#### Related
+
+- [twintproject/twint#1320](https://github.com/twintproject/twint/issues/1320)
+- [twintproject/twint#1322](https://github.com/twintproject/twint/pull/1322)
+- [twintproject/twint#1328](https://github.com/twintproject/twint/pull/1328)
+- [twintproject/twint#1061](https://github.com/twintproject/twint/issues/1061)
+- [twintproject/twint#1114](https://github.com/twintproject/twint/issues/1114)
+
 # TWINT - Twitter Intelligence Tool
 ![2](https://i.imgur.com/iaH3s7z.png)
 ![3](https://i.imgur.com/hVeCrqL.png)
