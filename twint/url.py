@@ -1,4 +1,5 @@
 import datetime
+import json
 from sys import platform
 import logging as logme
 from urllib.parse import urlencode
@@ -168,37 +169,27 @@ async def Search(config, init):
 
 def SearchProfile(config, init=None):
     logme.debug(__name__ + ':SearchProfile')
-    _url = 'https://api.twitter.com/2/timeline/profile/{user_id}.json'.format(user_id=config.User_id)
+    _url = 'https://twitter.com/i/api/graphql/CwLU7qTfeu0doqhSr6tW4A/UserTweetsAndReplies'
     tweet_count = 100
-    params = [
-        # some of the fields are not required, need to test which ones aren't required
-        ('include_profile_interstitial_type', '1'),
-        ('include_blocking', '1'),
-        ('include_blocked_by', '1'),
-        ('include_followed_by', '1'),
-        ('include_want_retweets', '1'),
-        ('include_mute_edge', '1'),
-        ('include_can_dm', '1'),
-        ('include_can_media_tag', '1'),
-        ('skip_status', '1'),
-        ('cards_platform', 'Web - 12'),
-        ('include_cards', '1'),
-        ('include_ext_alt_text', 'true'),
-        ('include_quote_count', 'true'),
-        ('include_reply_count', '1'),
-        ('tweet_mode', 'extended'),
-        ('include_entities', 'true'),
-        ('include_user_entities', 'true'),
-        ('include_ext_media_color', 'true'),
-        ('include_ext_media_availability', 'true'),
-        ('send_error_codes', 'true'),
-        ('simple_quoted_tweet', 'true'),
-        ('include_tweet_replies', 'true'),
-        ('count', tweet_count),
-        ('ext', 'mediaStats%2ChighlightedLabel'),
-    ]
-
+    variables = {
+        "userId": config.User_id,
+        "count": tweet_count,
+        "includePromotedContent": True,
+        "withCommunity": True,
+        "withSuperFollowsUserFields": True,
+        "withBirdwatchPivots": False,
+        "withDownvotePerspective": False,
+        "withReactionsMetadata": False,
+        "withReactionsPerspective": False,
+        "withSuperFollowsTweetFields": True,
+        "withVoice": True,
+        "withV2Timeline": False,
+        "__fs_interactive_text": False,
+        "__fs_dont_mention_me_view_api_enabled": False,
+    }
     if type(init) == str:
-        params.append(('cursor', str(init)))
+        variables['cursor'] = init
+    params = [('variables', json.dumps(variables, separators=(',',':')))]
+
     _serialQuery = _sanitizeQuery(_url, params)
-    return _url, params, _serialQuery
+    return _serialQuery, [], _serialQuery

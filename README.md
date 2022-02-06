@@ -12,6 +12,18 @@ This problem doesn't happen recently.
 - [twintproject/twint#1061](https://github.com/twintproject/twint/issues/1061)
 - [twintproject/twint#1114](https://github.com/twintproject/twint/issues/1114)
 
+### json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+The fix is **not complete**.
+`twint.run.Profile` will work but `twint.run.db` will not.
+This means [`test.py`](./test.py) causes an error.
+
+I think this is because the fields of the result table are not exactly the same as the traditional ones.
+
+#### Related 
+
+- [twintproject/twint#1335](https://github.com/twintproject/twint/issues/1335)
+
 # TWINT - Twitter Intelligence Tool
 ![2](https://i.imgur.com/iaH3s7z.png)
 ![3](https://i.imgur.com/hVeCrqL.png)
