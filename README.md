@@ -1,5 +1,17 @@
 ## Updates from twintproject/twint
 
+### twint.token.RefreshTokenException: Could not find the Guest token in HTML
+
+This problem doesn't happen recently.
+
+#### Related
+
+- [twintproject/twint#1320](https://github.com/twintproject/twint/issues/1320)
+- [twintproject/twint#1322](https://github.com/twintproject/twint/pull/1322)
+- [twintproject/twint#1328](https://github.com/twintproject/twint/pull/1328)
+- [twintproject/twint#1061](https://github.com/twintproject/twint/issues/1061)
+- [twintproject/twint#1114](https://github.com/twintproject/twint/issues/1114)
+
 ### json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
 
 The fix is **not complete**.
