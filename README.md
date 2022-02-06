@@ -1,3 +1,9 @@
+20220206
+
+# About this fork
+
+[This repository](https://github.com/minamotorin/twint) is the fork from [https://github.com/twintproject/twint](https://github.com/twintproject/twint) and for myself.
+
 ## Updates from twintproject/twint
 
 ### twint.token.RefreshTokenException: Could not find the Guest token in HTML
@@ -23,6 +29,17 @@ I think this is because the fields of the result table are not exactly the same 
 #### Related 
 
 - [twintproject/twint#1335](https://github.com/twintproject/twint/issues/1335)
+
+## References
+
+- [snscrape](https://github.com/JustAnotherArchivist/snscrape)
+- [gallery-dl](https://github.com/mikf/gallery-dl)
+
+## License
+
+This repository is also under the [MIT License](https://opensource.org/licenses/mit-license.php).
+
+---
 
 # TWINT - Twitter Intelligence Tool
 ![2](https://i.imgur.com/iaH3s7z.png)
