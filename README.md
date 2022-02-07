@@ -1,4 +1,4 @@
-20220206.1
+20220207.0
 
 # About this fork
 
@@ -31,6 +31,16 @@ I think this is because the fields of the result table are not exactly the same 
 #### Related 
 
 - [twintproject/twint#1335](https://github.com/twintproject/twint/issues/1335)
+
+### [-] TWINT requires Python version 3.6+.
+
+#### Related
+
+- [twintproject/twint#1344](https://github.com/twintproject/twint/issues/1344)
+- [twintproject/twint#1345](https://github.com/twintproject/twint/pull/1345)
+- [twintproject/twint#1344](https://github.com/twintproject/twint/issues/1346)
+- [twintproject/twint#1309](https://github.com/twintproject/twint/pull/1309)
+- [twintproject/twint#1313](https://github.com/twintproject/twint/issues/1313)
 
 ## References
 
