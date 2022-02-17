@@ -55,16 +55,16 @@ def MobileFav(response):
 
 
 def _get_cursor(response):
-    try: # case 1
-        next_cursor = response['timeline']['instructions'][0]['addEntries']['entries'][-1]['content'][
-            'operation']['cursor']['value']
-    except KeyError:
-        try: # case 1
+    if isinstance(response, dict): # case 1
+        try:
+            next_cursor = response['timeline']['instructions'][0]['addEntries']['entries'][-1]['content'][
+                'operation']['cursor']['value']
+        except KeyError:
             # this is needed because after the first request location of cursor is changed
             next_cursor = response['timeline']['instructions'][-1]['replaceEntry']['entry']['content']['operation'][
                 'cursor']['value']
-        except KeyError: # case 2
-            next_cursor = response[-1]['content']['value']
+    else: # case 2
+        next_cursor = response[-1]['content']['value']
     return next_cursor
 
 
