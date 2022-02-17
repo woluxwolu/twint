@@ -11,6 +11,7 @@ import random
 from json import loads, dumps
 from aiohttp_socks import ProxyConnector, ProxyType
 from urllib.parse import quote
+import time
 
 from . import url
 from .output import Tweets, Users
@@ -163,12 +164,29 @@ async def Request(_url, connector=None, params=None, headers=None):
 
 async def Response(session, _url, params=None):
     logme.debug(__name__ + ':Response')
-    with timeout(120):
-        async with session.get(_url, ssl=True, params=params, proxy=httpproxy) as response:
-            resp = await response.text()
-            if response.status == 429:  # 429 implies Too many requests i.e. Rate Limit Exceeded
-                raise TokenExpiryException(loads(resp)['errors'][0]['message'])
-            return resp
+    retries = 5
+    wait = 10 # No basis, maybe work with 0
+    for attempt in range(retries + 1):
+        try:
+            with timeout(120):
+                async with session.get(_url, ssl=True, params=params, proxy=httpproxy) as response:
+                    resp = await response.text()
+                    if response.status == 429:  # 429 implies Too many requests i.e. Rate Limit Exceeded
+                        raise TokenExpiryException(loads(resp)['errors'][0]['message'])
+                    return resp
+        except aiohttp.client_exceptions.ClientConnectorError as exc:
+            if attempt < retries:
+                retrying = ', retrying'
+                level = logme.WARNING
+            else:
+                retrying = ''
+                level = logme.ERROR
+            logme.log(level, f'Error retrieving {_url}: {exc!r}{retrying}')
+            if attempt < retries:
+                time.sleep(wait)
+            else:
+                logme.fatal(f'{retries + 1} requests to {_url} failed, giving up.')
+                raise TokenExpiryException(f'{exc!r}')
 
 
 async def RandomUserAgent(wa=None):
