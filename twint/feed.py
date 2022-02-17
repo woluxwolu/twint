@@ -55,16 +55,16 @@ def MobileFav(response):
 
 
 def _get_cursor(response):
-    try:
+    try: # case 1
         next_cursor = response['timeline']['instructions'][0]['addEntries']['entries'][-1]['content'][
             'operation']['cursor']['value']
     except KeyError:
-        try:
+        try: # case 1
             # this is needed because after the first request location of cursor is changed
             next_cursor = response['timeline']['instructions'][-1]['replaceEntry']['entry']['content']['operation'][
                 'cursor']['value']
-        except KeyError:
-            next_cursor = response['timeline']['instructions'][0]['entries'][-1]['content']['value']
+        except KeyError: # case 2
+            next_cursor = response[-1]['content']['value']
     return next_cursor
 
 
@@ -122,12 +122,24 @@ def parse_tweets(config, response):
                         'retweet_date': _dt,
                     }
                 feed.append(temp_obj)
+        next_cursor = _get_cursor(response) # case 1
     else:
         response = response['data']['user']['result']['timeline']
-        for timeline_entry in response['timeline']['instructions'][0]['entries']:
+        entries = response['timeline']['instructions']
+        for e in entries:
+            if e.get('entries'):
+                entries = e['entries']
+                break
+        if len(entries) == 2:
+            msg = 'No more data!'
+            raise NoMoreTweetsException(msg)
+        for timeline_entry in entries:
             if timeline_entry['content'].get('itemContent'):
-                temp_obj = timeline_entry['content']['itemContent']['tweet_results']['result']['legacy']
-                temp_obj['user_data'] = timeline_entry['content']['itemContent']['tweet_results']['result']['core']['user_results']['result']['legacy']
-                feed.append(temp_obj)
-    next_cursor = _get_cursor(response)
+                try:
+                    temp_obj = timeline_entry['content']['itemContent']['tweet_results']['result']['legacy']
+                    temp_obj['user_data'] = timeline_entry['content']['itemContent']['tweet_results']['result']['core']['user_results']['result']['legacy']
+                    feed.append(temp_obj)
+                except KeyError: # doubtful
+                    next
+        next_cursor = _get_cursor(entries) # case 2
     return feed, next_cursor
