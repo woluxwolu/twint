@@ -33,7 +33,7 @@ user_agent_list = [
     # 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)'
     # ' Chrome/44.0.2403.157 Safari/537.36',
     # 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
-    # ' Chrome/60.0.3112.113 Safari/537.36',
+    # ' Chrome/60.x0.3112.113 Safari/537.36',
     # 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
     # ' Chrome/57.0.2987.133 Safari/537.36',
     # 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
@@ -55,7 +55,7 @@ user_agent_list = [
     'Mozilla/5.0 (Windows NT 6.1; Win64; x64; Trident/7.0; rv:11.0) like Gecko',
     'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)',
     'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)',
-    'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET '
+    'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET x '
     'CLR 3.5.30729)',
 ]
 
@@ -165,7 +165,7 @@ async def Request(_url, connector=None, params=None, headers=None):
 async def Response(session, _url, params=None):
     logme.debug(__name__ + ':Response')
     retries = 5
-    wait = 10 # No basis, maybe work with 0
+    wait = 10  # No basis, maybe work with 0
     for attempt in range(retries + 1):
         try:
             with timeout(120):
@@ -198,18 +198,19 @@ async def RandomUserAgent(wa=None):
     except:
         return random.choice(user_agent_list)
 
-
 async def Username(_id, bearer_token, guest_token):
     logme.debug(__name__ + ':Username')
-    _dct = {'userId': _id, 'withHighlightedLabel': False}
-    _url = "https://api.twitter.com/graphql/B9FuNQVmyx32rdbIPEZKag/UserByRestId?variables={}".format(dict_to_url(_dct))
+    _dct = {'screen_name': _id, 'withSafetyModeUserFields': False, 'withSuperFollowsUserFields': False}
+    _url = "https://twitter.com/i/api/graphql/Bhlf1dYJ3bYCKmLfeEQ31A/UserByScreenName?variables={}".format(
+        dict_to_url(_dct))
     _headers = {
         'authorization': bearer_token,
         'x-guest-token': guest_token,
     }
+    print(dumps(_dct),_url)
     r = await Request(_url, headers=_headers)
     j_r = loads(r)
-    username = j_r['data']['user']['legacy']['screen_name']
+    username = j_r['data']['user']['result']['legacy']['screen_name']
     return username
 
 
@@ -227,7 +228,7 @@ async def Tweet(url, config, conn):
 async def User(username, config, conn, user_id=False):
     logme.debug(__name__ + ':User')
     _dct = {'screen_name': username, 'withHighlightedLabel': False}
-    _url = 'https://api.twitter.com/graphql/jMaTS-_Ea8vh9rpKggJbCQ/UserByScreenName?variables={}'\
+    _url = 'https://api.twitter.com/graphql/jMaTS-_Ea8vh9rpKggJbCQ/UserByScreenName?variables={}' \
         .format(dict_to_url(_dct))
     _headers = {
         'authorization': config.Bearer_token,
