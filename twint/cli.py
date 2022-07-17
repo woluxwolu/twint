@@ -98,6 +98,8 @@ def initialize(args):
     c.Store_csv = args.csv
     c.Tabs = args.tabs
     c.Store_json = args.json
+    c.Utc = args.utc
+    c.Full_text = args.full_text
     c.Show_hashtags = args.hashtags
     c.Show_cashtags = args.cashtags
     c.Limit = args.limit
@@ -172,6 +174,8 @@ def options():
     ap.add_argument("--csv", help="Write as .csv file.", action="store_true")
     ap.add_argument("--tabs", help="Separate CSV fields with tab characters, not commas.", action="store_true")
     ap.add_argument("--json", help="Write as .json file", action="store_true")
+    ap.add_argument("--utc", help="Treat time as UTC.", action="store_true")
+    ap.add_argument("--full-text", help="Preserve full Tweet text.", action="store_true")
     ap.add_argument("--hashtags", help="Output hashtags in seperate column.", action="store_true")
     ap.add_argument("--cashtags", help="Output cashtags in seperate column.", action="store_true")
     ap.add_argument("--userid", help="Twitter user id.")

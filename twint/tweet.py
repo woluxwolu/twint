@@ -61,14 +61,15 @@ def _get_reply_to(tw):
     return reply_to
 
 
-def getText(tw):
+def getText(tw, config):
     """Replace some text
     """
     logme.debug(__name__ + ':getText')
     text = tw['full_text']
-    text = text.replace("http", " http")
-    text = text.replace("pic.twitter", " pic.twitter")
-    text = text.replace("\n", " ")
+    if not config.Full_text:
+        text = text.replace("http", " http")
+        text = text.replace("pic.twitter", " pic.twitter")
+        text = text.replace("\n", " ")
 
     return text
 
@@ -85,7 +86,8 @@ def Tweet(tw, config):
     # parsing date to user-friendly format
     _dt = tw['created_at']
     _dt = datetime.strptime(_dt, '%a %b %d %H:%M:%S %z %Y')
-    _dt = utc_to_local(_dt)
+    if not config.Utc:
+        _dt = utc_to_local(_dt)
     t.datetime = str(_dt.strftime(Tweet_formats['datetime']))
     # date is of the format year,
     t.datestamp = _dt.strftime(Tweet_formats['datestamp'])
@@ -95,7 +97,7 @@ def Tweet(tw, config):
     t.username = tw["user_data"]['screen_name']
     t.name = tw["user_data"]['name']
     t.place = tw['geo'] if 'geo' in tw and tw['geo'] else ""
-    t.timezone = strftime("%z", localtime())
+    t.timezone = _dt.strftime("%z")
     t.mentions = _get_mentions(tw)
     t.reply_to = _get_reply_to(tw)
     try:
@@ -115,7 +117,7 @@ def Tweet(tw, config):
         t.thumbnail = tw['extended_entities']['media'][0]['media_url_https']
     except KeyError:
         t.thumbnail = ''
-    t.tweet = getText(tw)
+    t.tweet = getText(tw, config)
     t.lang = tw['lang']
     try:
         t.hashtags = [hashtag['text'] for hashtag in tw['entities']['hashtags']]
