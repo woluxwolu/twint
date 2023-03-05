@@ -116,3 +116,6 @@ ENV/
 *.txt
 
 test_twint.py
+
+/.project
+/.pydevproject
