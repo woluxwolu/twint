@@ -120,3 +120,6 @@ test_twint.py
 /.project
 /.pydevproject
 /.idea
+
+# virtual env
+/python3.10
