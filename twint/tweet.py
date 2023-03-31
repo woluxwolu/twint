@@ -129,6 +129,7 @@ def Tweet(tw, config):
         t.cashtags = []
     t.replies_count = tw['reply_count']
     t.retweets_count = tw['retweet_count']
+    t.quotes_count = tw['quote_count']
     t.likes_count = tw['favorite_count']
     t.link = f"https://twitter.com/{t.username}/status/{t.id}"
     try:
