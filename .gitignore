@@ -123,3 +123,6 @@ test_twint.py
 
 # virtual env
 /python3.10
+
+# database files
+*.db
