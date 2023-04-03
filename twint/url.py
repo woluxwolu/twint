@@ -97,6 +97,8 @@ async def Search(config, init):
         ('ext', 'mediaStats%2ChighlightedLabel'),
         ('tweet_search_mode', 'live'),  # this can be handled better, maybe take an argument and set it then
     ]
+    if config.Impressions:
+        params.append(('include_ext_views', 'true'))
     if not config.Popular_tweets:
         params.append(('f', 'tweets'))
     if config.Lang:

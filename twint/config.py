@@ -87,3 +87,4 @@ class Config:
     deleted: list = None
     Utc: bool = False
     Full_text: bool = False
+    Impressions: bool = None
