@@ -60,6 +60,7 @@ class Config:
     Pandas_clean: bool = True
     Lowercase: bool = True
     Pandas_au: bool = True
+    Auth_token: Optional[str] = None
     Proxy_host: str = ""
     Proxy_port: int = 0
     Proxy_type: object = None
