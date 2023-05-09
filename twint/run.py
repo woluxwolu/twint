@@ -76,8 +76,7 @@ class Twint:
                     if len(self.feed) == 0 and len(self.init) == 0:
                         while (len(self.feed) == 0 or len(self.init) == 0) and favorite_err_cnt < 5:
                             self.user_agent = await get.RandomUserAgent(wa=False)
-                            response = await get.RequestUrl(self.config, self.init,
-                                                            headers=[("User-Agent", self.user_agent)])
+                            response = await get.RequestUrl(self.config, self.init)
                             self.feed, self.init = feed.MobileFav(response)
                             favorite_err_cnt += 1
                             time.sleep(1)
