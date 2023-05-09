@@ -109,12 +109,19 @@ def get_connector(config):
 
 async def RequestUrl(config, init):
     logme.debug(__name__ + ':RequestUrl')
+    csrf_token = random.randbytes(16).hex() # Looks like any random string works
     _connector = get_connector(config)
     _serialQuery = ""
     params = []
-    cookies = {}
+    cookies = {
+        "ct0": csrf_token,
+    }
     _url = ""
-    _headers = [("authorization", config.Bearer_token), ("x-guest-token", config.Guest_token)]
+    _headers = {
+        "authorization": config.Bearer_token,
+        "x-guest-token": config.Guest_token,
+        "x-csrf-token": csrf_token,
+    }
 
     auth_token = config.Auth_token
     if auth_token is None:
