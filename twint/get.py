@@ -1,6 +1,7 @@
 from async_timeout import timeout
 from datetime import datetime
 from bs4 import BeautifulSoup
+import os
 import sys
 import socket
 import aiohttp
@@ -108,11 +109,25 @@ def get_connector(config):
 
 async def RequestUrl(config, init):
     logme.debug(__name__ + ':RequestUrl')
+    csrf_token = random.randbytes(16).hex() # Looks like any random string works
     _connector = get_connector(config)
     _serialQuery = ""
     params = []
+    cookies = {
+        "ct0": csrf_token,
+    }
     _url = ""
-    _headers = [("authorization", config.Bearer_token), ("x-guest-token", config.Guest_token)]
+    _headers = {
+        "authorization": config.Bearer_token,
+        "x-guest-token": config.Guest_token,
+        "x-csrf-token": csrf_token,
+    }
+
+    auth_token = config.Auth_token
+    if auth_token is None:
+        auth_token = os.getenv('TWITTER_AUTH_TOKEN')
+    if auth_token:
+        cookies["auth_token"] = auth_token
 
     # TODO : do this later
     if config.Profile:
@@ -133,7 +148,7 @@ async def RequestUrl(config, init):
             _url = await url.Favorites(config.Username, init)
         _serialQuery = _url
 
-    response = await Request(_url, params=params, connector=_connector, headers=_headers)
+    response = await Request(_url, params=params, connector=_connector, headers=_headers, cookies=cookies)
 
     if config.Debug:
         print(_serialQuery, file=open("twint-request_urls.log", "a", encoding="utf-8"))
@@ -156,9 +171,9 @@ def ForceNewTorIdentity(config):
         sys.stderr.write('If you want to rotate Tor ports automatically - enable Tor control port\n')
 
 
-async def Request(_url, connector=None, params=None, headers=None):
+async def Request(_url, connector=None, params=None, headers=None, cookies=None):
     logme.debug(__name__ + ':Request:Connector')
-    async with aiohttp.ClientSession(connector=connector, headers=headers) as session:
+    async with aiohttp.ClientSession(connector=connector, headers=headers, cookies=cookies) as session:
         return await Response(session, _url, params)
 
 
@@ -173,6 +188,8 @@ async def Response(session, _url, params=None):
                     resp = await response.text()
                     if response.status == 429:  # 429 implies Too many requests i.e. Rate Limit Exceeded
                         raise TokenExpiryException(loads(resp)['errors'][0]['message'])
+                    if response.status == 403:
+                        raise ConnectionError("Access forbidden, try passing --auth-token.")
                     return resp
         except aiohttp.client_exceptions.ClientConnectorError as exc:
             if attempt < retries:

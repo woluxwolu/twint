@@ -39,6 +39,8 @@ class Config:
     Favorites: bool = False
     TwitterSearch: bool = False
     User_full: bool = False
+    Utc: bool = False
+    Full_text: bool = False
     # Profile_full: bool = False
     Store_object: bool = False
     Store_object_tweets_list: list = None
@@ -58,6 +60,7 @@ class Config:
     Pandas_clean: bool = True
     Lowercase: bool = True
     Pandas_au: bool = True
+    Auth_token: Optional[str] = None
     Proxy_host: str = ""
     Proxy_port: int = 0
     Proxy_type: object = None

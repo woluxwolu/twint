@@ -112,6 +112,7 @@ def init(db):
                     tweet_id integer not null,
                     user_id integer not null,
                     username text not null,
+                    name text not null,
                     CONSTRAINT replies_pk PRIMARY KEY (user_id, tweet_id),
                     CONSTRAINT tweet_id_fk FOREIGN KEY (tweet_id) REFERENCES tweets(id)
                 );
@@ -289,8 +290,8 @@ def tweets(conn, Tweet, config):
 
         if Tweet.reply_to:
             for reply in Tweet.reply_to:
-                query = 'INSERT INTO replies VALUES(?,?,?)'
-                cursor.execute(query, (Tweet.id, int(reply['user_id']), reply['username']))
+                query = 'INSERT INTO replies VALUES(?,?,?,?)'
+                cursor.execute(query, (Tweet.id, int(reply['id']), reply['screen_name'], reply['name']))
 
         conn.commit()
     except sqlite3.IntegrityError:

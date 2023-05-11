@@ -123,6 +123,7 @@ def initialize(args):
     c.Media = args.media
     c.Replies = args.replies
     c.Pandas_clean = args.pandas_clean
+    c.Auth_token = args.auth_token
     c.Proxy_host = args.proxy_host
     c.Proxy_port = args.proxy_port
     c.Proxy_type = args.proxy_type
@@ -190,6 +191,7 @@ def options():
     ap.add_argument("--followers", help="Scrape a person's followers.", action="store_true")
     ap.add_argument("--following", help="Scrape a person's follows", action="store_true")
     ap.add_argument("--favorites", help="Scrape Tweets a user has liked.", action="store_true")
+    ap.add_argument("--auth-token", help="Twitter login cookie.")
     ap.add_argument("--proxy-type", help="Socks5, HTTP, etc.")
     ap.add_argument("--proxy-host", help="Proxy hostname or IP.")
     ap.add_argument("--proxy-port", help="The port of the proxy server.")
